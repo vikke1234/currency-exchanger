@@ -1,14 +1,12 @@
-import urllib2
-import json
 import wx
 
-y = 1
+from yahoo_finance import Currency
 
+'''
 def currencyConverter(fran,till,valuta_mangd):
-    #valuta_mangd = 1
+    #valuta_mangd =
     #fran = raw_input("Which currencies would you like to get the exchange rate from? Examples; EUR, USD\n")
     #till = raw_input("the second one\n")
-
     yql_base_url = "https://query.yahooapis.com/v1/public/yql"
     yql_query = 'select%20*%20from%20yahoo.finance.xchange%20where%20pair%20in%20("'+fran+till+'")'
     yql_query_url = yql_base_url + "?q=" + yql_query + "&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"
@@ -25,16 +23,14 @@ def currencyConverter(fran,till,valuta_mangd):
             return e.code
         elif hasattr(e, 'reason'):
             return e.reason
-
+#    rate = currencyConverter(fran,till,valuta_mangd)
 fran='USD'
 till = 'eur'
 valuta_mangd = 1
 #currencyConverter(fran,till,valuta_mangd)
-
-rate = currencyConverter(fran,till,valuta_mangd)
 #print rate
-
-
+'''
+crreny = Currency('usdeur')
 
 class WindowClass(wx.Frame):
     def __init__(self, *args, **kwargs):
@@ -42,24 +38,31 @@ class WindowClass(wx.Frame):
         self.basicGUI()
 
     def basicGUI(self):
+        #items
         menu_bar = wx.MenuBar()
-        panel = wx.Panel(self)
         filebutton = wx.Menu()
         editButton = wx.Menu()
-        exit_item = filebutton.Append(wx.ID_EXIT, 'Exit', 'Status msg')
-        menu_bar.Append(filebutton, 'File')
-        menu_bar.Append(editButton, 'Currencies')
+        currencyButton = wx.Menu()
 
+        #under construction below
+
+        #currencyItem = currencyButton.Append()
+        exitItem = filebutton.Append(wx.ID_EXIT, 'Exit', 'Exit application')
+        menu_bar.Append(filebutton, '&File')
         self.SetMenuBar(menu_bar)
-        self.Bind(wx.EVT_MENU, self.Quit, exit_item)
-        x = wx.TextEntryDialog(None, 'From what currency', 'Currencies', 'EXAMPLE: USD,EUR')
-        if x.ShowModal() == wx.ID_OK:
-            currencies = x.GetValue()
-            fran = currencies.lower().split(",")
-        currencyConverter(fran[0],fran[1],1)
-        wx.StaticText(None,-1,rate)
-        self.SetTitle('Currency converter')
+        self.Bind(wx.EVT_MENU, self.Quit, exitItem)
         self.Show(True)
+        self.CreateStatusBar()
+        panel = wx.Panel(self)
+        #panels and stuff
+
+
+
+        self.quote = wx.StaticText(panel, label=crreny.get_rate(), pos=(20, 30))
+
+
+        self.SetTitle('Currency converter')
+        #self.Show(True)
 
     def Quit(self, e):
         self.Close()
